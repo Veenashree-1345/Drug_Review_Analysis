@@ -12,3 +12,4 @@ logistic Regression
 naive bayes
 joblib
 streamlit
+pickle-mixin
