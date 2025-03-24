@@ -8,7 +8,6 @@ nltk
 ipywidgets
 textblob
 scikit-learn
-logisticRegression
 naivebayes
 streamlit
 pickle-mixin
