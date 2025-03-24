@@ -3,7 +3,6 @@ pandas
 smote
 matplotlib
 seaborn       
-joblib
 nltk
 ipywidgets
 textblob
