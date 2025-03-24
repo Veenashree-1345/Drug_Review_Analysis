@@ -1,5 +1,6 @@
 numpy
 pandas
+joblib
 smote
 matplotlib
 seaborn       
@@ -11,4 +12,3 @@ logisticRegression
 naivebayes
 streamlit
 pickle-mixin
-joblib
