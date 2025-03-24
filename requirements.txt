@@ -11,3 +11,5 @@ scikit-learn
 naivebayes
 streamlit
 pickle-mixin
+keras
+tensorflow
