@@ -5,7 +5,7 @@ smote
 matplotlib
 seaborn
 nltk
-flask              # If deploying with Flask
-fastapi            # If using FastAPI
-uvicorn            # FastAPI server
+Streamlit
+fastapi            
+uvicorn            
 joblib
