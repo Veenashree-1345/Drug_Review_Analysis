@@ -1,16 +1,7 @@
 import streamlit as st
-import joblib
 import numpy as np
 
-# Load models and vectorizers
-vectorizer = joblib.load("vectorizer.pkl")  # Ensuring the correct vectorizer
-con_vectorizer = joblib.load("con_vectorizer.pkl")  # Loading the missing con_vectorizer
-sentiment_model = joblib.load("sentiment_model.pkl")
-nb_condition_model = joblib.load("nb_condition_model.pkl")
-label_encoder = joblib.load("label_encoder.pkl")
-tokenizer = joblib.load("tokenizer.pkl")
-lda_model = joblib.load("lda_model.pkl")
-lda_vectorizer = joblib.load("lda_vectorizer.pkl")
+
 
 # Streamlit UI
 st.title("💊 Drug Review Analysis")
