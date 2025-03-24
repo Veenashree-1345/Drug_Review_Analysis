@@ -1,11 +1,14 @@
 numpy
 pandas
-scikit-learn
 smote
 matplotlib
-seaborn
-nltk
-Streamlit
-fastapi            
-uvicorn            
+seaborn       
 joblib
+nltk
+ipywidgets
+textblob
+scikit-learn
+logistic Regression
+naive bayes
+joblib
+streamlit
