@@ -12,14 +12,16 @@ nb_condition_model = joblib.load("nb_condition_model.pkl")
 label_encoder = joblib.load("label_encoder.pkl")
 tokenizer = joblib.load("tokenizer.pkl")
 
+# Predefined drug names
+drug_names = ["Paracetamol", "Ibuprofen", "Aspirin", "Metformin", "Amoxicillin"]
+
 # Streamlit UI
 st.set_page_config(page_title="Drug Review Analysis", page_icon="💊", layout="wide")
 st.title("💊 Drug Review Analysis App")
 st.markdown("---")
 
-# Sidebar Navigation
-st.sidebar.title("🔍 Choose a Functionality")
-option = st.sidebar.radio("Select an option:", [
+# Dropdown for Function Selection
+option = st.selectbox("Select a Functionality:", [
     "Sentiment Analysis",
     "Condition Prediction",
     "Identify Helpful Reviews",
@@ -51,7 +53,7 @@ elif option == "Condition Prediction":
 elif option == "Identify Helpful Reviews":
     st.header("📚 Identify Elements that Make Reviews Helpful")
     review = st.text_area("Enter your review:", height=150)
-    drug_name = st.text_input("Drug Name (Optional)")
+    drug_name = st.selectbox("Select a Drug Name", drug_names)
     if st.button("Analyze Helpfulness", use_container_width=True):
         if review:
             words = review.split()
@@ -67,14 +69,14 @@ elif option == "Identify Helpful Reviews":
                 key_elements.append("✔️ Includes Medical Advice")
             
             if key_elements:
-                st.success(f"Key elements of this review for {drug_name if drug_name else 'this drug'}: \n" + "\n".join(key_elements))
+                st.success(f"Key elements of this review for {drug_name}: \n" + "\n".join(key_elements))
             else:
                 st.info("This review lacks common helpful elements.")
 
 elif option == "Understand Negative Reviews":
     st.header("📉 Analyze Negative Reviews & Improve the Drug")
     review = st.text_area("Enter your review:", height=150)
-    drug_name = st.text_input("Drug Name (Optional)")
+    drug_name = st.selectbox("Select a Drug Name", drug_names)
     if st.button("Analyze Negative Review", use_container_width=True):
         if review:
             transformed_review = vectorizer.transform([review])
@@ -89,6 +91,6 @@ elif option == "Understand Negative Reviews":
                     st.warning("- Improve effectiveness by adjusting dosage or formulation.")
                 if "expensive" in review.lower():
                     st.warning("- Consider making the drug more affordable or providing discounts.")
-                st.info(f"Feedback considered for {drug_name if drug_name else 'this drug'}.")
+                st.info(f"Feedback considered for {drug_name}.")
             else:
                 st.success("This review does not seem highly negative.")
