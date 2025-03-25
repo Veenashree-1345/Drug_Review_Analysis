@@ -1,3 +1,4 @@
+
 import streamlit as st
 import joblib
 import numpy as np
@@ -13,7 +14,7 @@ label_encoder = joblib.load("label_encoder.pkl")
 tokenizer = joblib.load("tokenizer.pkl")
 
 # Predefined drug names
-drug_names = ["Paracetamol", "Ibuprofen", "Aspirin", "Metformin", "Amoxicillin", "Omeprazole", "Losartan", "Atorvastatin", "Simvastatin", "Gabapentin"]
+drug_names = ["Paracetamol", "Ibuprofen", "Aspirin", "Metformin", "Amoxicillin", "Omeprazole", "Losartan", "Atorvastatin", "Simvastatin", "Gabapentin", "Ciprofloxacin", "Cetirizine", "Prednisone", "Hydrochlorothiazide", "Levothyroxine"]
 
 # Streamlit UI
 st.set_page_config(page_title="Drug Review Analysis", page_icon="💊", layout="wide")
@@ -24,7 +25,6 @@ st.markdown("---")
 option = st.selectbox("Select a Functionality:", [
     "Sentiment Analysis",
     "Condition Prediction",
-    "Understand Review Elements",
     "Understand Negative Reviews"
 ])
 
@@ -36,7 +36,8 @@ if option == "Sentiment Analysis":
     if st.button("Analyze Sentiment", use_container_width=True):
         if review:
             transformed_review = vectorizer.transform([review])
-            sentiment_prediction = sentiment_model.predict(transformed_review)[0]
+            sentiment_probs = sentiment_model.predict_proba(transformed_review)[0]
+            sentiment_prediction = np.argmax(sentiment_probs)  # Ensure correct classification
             sentiment_map = {0: "😡 Negative", 1: "😐 Neutral", 2: "😊 Positive"}
             sentiment_label = sentiment_map.get(sentiment_prediction, "Unknown")
             st.success(f"Predicted Sentiment: {sentiment_label}")
@@ -74,7 +75,8 @@ elif option == "Understand Negative Reviews":
     if st.button("Analyze Negative Review", use_container_width=True):
         if review:
             transformed_review = vectorizer.transform([review])
-            sentiment_prediction = sentiment_model.predict(transformed_review)[0]
+            sentiment_probs = sentiment_model.predict_proba(transformed_review)[0]
+            sentiment_prediction = np.argmax(sentiment_probs)
             
             if sentiment_prediction == 0:
                 st.error("❌ This review indicates dissatisfaction!")
