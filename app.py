@@ -25,7 +25,8 @@ option = st.selectbox("Select a Functionality:", [
     "Sentiment Analysis",
     "Condition Prediction",
     "Understand Negative Reviews",
-    "Explore Drug-Condition Association"
+    "Explore Drug-Condition Association",
+    "Estimate Review Score"
 ])
 
 st.markdown("---")
@@ -98,9 +99,18 @@ elif option == "Explore Drug-Condition Association":
     selected_condition = st.text_input("Enter a medical condition:")
     if st.button("Find Associated Drugs", use_container_width=True):
         if selected_condition:
-            # Placeholder logic: This should be replaced with a real dataset lookup
             associated_drugs = [drug for drug in drug_names if drug.lower().startswith(selected_condition[:3].lower())]
             if associated_drugs:
                 st.success(f"Drugs commonly used for {selected_condition}: {', '.join(associated_drugs)}")
             else:
                 st.warning("No known drug associations found. Try a different condition.")
+
+elif option == "Estimate Review Score":
+    st.header("⭐ Estimate Review Score")
+    review = st.text_area("Enter your review:", height=150)
+    if st.button("Estimate Score", use_container_width=True):
+        if review:
+            transformed_review = vectorizer.transform([review])
+            sentiment_probs = sentiment_model.predict_proba(transformed_review)[0]
+            score = round((sentiment_probs[2] * 5) + (sentiment_probs[1] * 3) + (sentiment_probs[0] * 1), 1)
+            st.success(f"Estimated Review Score: {score}/5")
