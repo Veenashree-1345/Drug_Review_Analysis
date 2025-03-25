@@ -13,7 +13,7 @@ label_encoder = joblib.load("label_encoder.pkl")
 tokenizer = joblib.load("tokenizer.pkl")
 
 # Predefined drug names
-drug_names = ["Paracetamol", "Ibuprofen", "Aspirin", "Metformin", "Amoxicillin"]
+drug_names = ["Paracetamol", "Ibuprofen", "Aspirin", "Metformin", "Amoxicillin", "Omeprazole", "Losartan", "Atorvastatin", "Simvastatin", "Gabapentin"]
 
 # Streamlit UI
 st.set_page_config(page_title="Drug Review Analysis", page_icon="💊", layout="wide")
@@ -24,7 +24,7 @@ st.markdown("---")
 option = st.selectbox("Select a Functionality:", [
     "Sentiment Analysis",
     "Condition Prediction",
-    "Identify Helpful Reviews",
+    "Understand Review Elements",
     "Understand Negative Reviews"
 ])
 
@@ -38,24 +38,10 @@ if option == "Sentiment Analysis":
             transformed_review = vectorizer.transform([review])
             sentiment_prediction = sentiment_model.predict(transformed_review)[0]
             sentiment_map = {0: "😡 Negative", 1: "😐 Neutral", 2: "😊 Positive"}
-            st.success(f"Predicted Sentiment: {sentiment_map.get(sentiment_prediction, 'Unknown')}")
+            sentiment_label = sentiment_map.get(sentiment_prediction, "Unknown")
+            st.success(f"Predicted Sentiment: {sentiment_label}")
 
-elif option == "Condition Prediction":
-    st.header("🧐 Predict Condition from Review")
-    review = st.text_area("Enter your review:", height=150)
-    if st.button("Predict Condition", use_container_width=True):
-        if review:
-            transformed_review = con_vectorizer.transform([review])  # Using con_vectorizer
-            condition_pred = nb_condition_model.predict(transformed_review)[0]
-            predicted_condition = label_encoder.inverse_transform([condition_pred])[0]
-            st.success(f"Predicted Condition: **{predicted_condition}**")
-
-elif option == "Identify Helpful Reviews":
-    st.header("📚 Identify Elements that Make Reviews Helpful")
-    review = st.text_area("Enter your review:", height=150)
-    drug_name = st.selectbox("Select a Drug Name", drug_names)
-    if st.button("Analyze Helpfulness", use_container_width=True):
-        if review:
+            # Identify key elements within sentiment analysis
             words = review.split()
             key_elements = []
             
@@ -69,9 +55,17 @@ elif option == "Identify Helpful Reviews":
                 key_elements.append("✔️ Includes Medical Advice")
             
             if key_elements:
-                st.success(f"Key elements of this review for {drug_name}: \n" + "\n".join(key_elements))
-            else:
-                st.info("This review lacks common helpful elements.")
+                st.info("Key Elements: " + ", ".join(key_elements))
+
+elif option == "Condition Prediction":
+    st.header("🧐 Predict Condition from Review")
+    review = st.text_area("Enter your review:", height=150)
+    if st.button("Predict Condition", use_container_width=True):
+        if review:
+            transformed_review = con_vectorizer.transform([review])  # Using con_vectorizer
+            condition_pred = nb_condition_model.predict(transformed_review)[0]
+            predicted_condition = label_encoder.inverse_transform([condition_pred])[0]
+            st.success(f"Predicted Condition: **{predicted_condition}**")
 
 elif option == "Understand Negative Reviews":
     st.header("📉 Analyze Negative Reviews & Improve the Drug")
