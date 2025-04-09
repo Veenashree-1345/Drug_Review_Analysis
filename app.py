@@ -25,7 +25,6 @@ option = st.selectbox("Select a Functionality:", [
     "Sentiment Analysis",
     "Condition Prediction",
     "Understand Negative Reviews",
-    "Explore Drug-Condition Association",
     "Estimate Review Score"
 ])
 
